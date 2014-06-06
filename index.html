@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>BDBOAuth1Manager by bdbergeron</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>BDBOAuth1Manager</h1>
+        <h2>AFNetworking 2.0-compatible replacement for AFOAuth1Client.</h2>
+        <a href="https://github.com/bdbergeron/BDBOAuth1Manager" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="bdboauth1manager" class="anchor" href="#bdboauth1manager"><span class="octicon octicon-link"></span></a>BDBOAuth1Manager</h1>
+
+<p>BDBOAuth1Manager is an AFNetworking 2.0-compatible replacement for AFOAuth1Client.</p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>BDBOAuth1Manager consists of three core classes: <code>BDBOAuth1RequestSerializer</code>, <code>BDBOAuth1RequestOperationManger</code>, and <code>BDBOAuth1SessionManager</code>. Below I will provide a quick overview of each, but to really see how the three classes work together, take a look at the included demo apps. One is a simple Twitter client and the other a simple Flickr photo gallery, but they show how to get started using BDBOAuth1Manager in your projects.</p>
+
+<h3>
+<a name="bdboauth1requestoperationmanger" class="anchor" href="#bdboauth1requestoperationmanger"><span class="octicon octicon-link"></span></a>BDBOAuth1RequestOperationManger</h3>
+
+<p><code>BDBOAuth1RequestOperationManger</code> is a subclass of <code>AFHTTPRequestOperationManager</code> that provides methods to facilitate the OAuth 1 authentication flow.</p>
+
+<div class="highlight highlight-objective-c"><pre><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">BDBOAuth1RequestSerializer</span> <span class="o">*</span><span class="n">requestSerializer</span><span class="p">;</span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">,</span> <span class="n">readonly</span><span class="p">,</span> <span class="n">getter</span> <span class="o">=</span> <span class="n">isAuthorized</span><span class="p">)</span> <span class="kt">BOOL</span> <span class="n">authorized</span><span class="p">;</span>
+
+<span class="cp">#pragma mark Initialization</span>
+<span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">initWithBaseURL:</span><span class="p">(</span><span class="n">NSURL</span> <span class="o">*</span><span class="p">)</span><span class="nv">url</span>
+                    <span class="nl">consumerKey:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span>
+                 <span class="nl">consumerSecret:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">secret</span><span class="p">;</span>
+
+<span class="cp">#pragma mark Deauthorize</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">deauthorize</span><span class="p">;</span>
+
+<span class="cp">#pragma mark Authorization Flow</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">fetchRequestTokenWithPath:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">requestPath</span>
+                           <span class="nl">method:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">method</span>
+                      <span class="nl">callbackURL:</span><span class="p">(</span><span class="n">NSURL</span> <span class="o">*</span><span class="p">)</span><span class="nv">callbackURL</span>
+                            <span class="nl">scope:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">scope</span>
+                          <span class="nl">success:</span><span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">BDBOAuthToken</span> <span class="o">*</span><span class="n">requestToken</span><span class="p">))</span><span class="nv">success</span>
+                          <span class="nl">failure:</span><span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">))</span><span class="nv">failure</span><span class="p">;</span>
+
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">fetchAccessTokenWithPath:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">accessPath</span>
+                          <span class="nl">method:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">method</span>
+                    <span class="nl">requestToken:</span><span class="p">(</span><span class="n">BDBOAuthToken</span> <span class="o">*</span><span class="p">)</span><span class="nv">requestToken</span>
+                         <span class="nl">success:</span><span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">BDBOAuthToken</span> <span class="o">*</span><span class="n">accessToken</span><span class="p">))</span><span class="nv">success</span>
+                         <span class="nl">failure:</span><span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">))</span><span class="nv">failure</span><span class="p">;</span>
+</pre></div>
+
+<h3>
+<a name="bdboauth1sessionmanager" class="anchor" href="#bdboauth1sessionmanager"><span class="octicon octicon-link"></span></a>BDBOAuth1SessionManager</h3>
+
+<p><code>BDBOAuth1SessionManager</code> is a subclass of <code>AFHTTPSessionManager</code> that implements all the same methods and properties as <code>BDBOAuth1RequestOperationManger</code>, described above.</p>
+
+<p>If you're targeting either iOS 6 or OS X 10.8, you must use <code>BDBOAuth1RequestOperationManger</code>, as the underlying <code>NSURLSession</code> that is used by <code>AFHTTPSessionManager</code> is a new addition to the iOS and OS X networking frameworks for iOS 7 and OS X 10.9.</p>
+
+<h3>
+<a name="bdboauth1requestserializer" class="anchor" href="#bdboauth1requestserializer"><span class="octicon octicon-link"></span></a>BDBOAuth1RequestSerializer</h3>
+
+<p><code>BDBOAuth1RequestSerializer</code> is a subclass of <code>AFHTTPRequestSerializer</code> that handles all the networking requests performed by <code>BDBOAuth1RequestOperationManger</code> and <code>BDBOAuth1SessionManager</code>. Both classes automatically handle the creation of this serializer, so you should never have to instantiate it on your own.</p>
+
+<p><code>BDBOAuth1RequestSerializer</code> also has built-in support for storing and retrieving access tokens to/from the user's keychain, utilizing the service name to differentiate tokens. <code>BDBOAuth1RequestOperationManger</code> and <code>BDBOAuth1SessionManager</code> automatically set the service name to baseURL.host (e.g. api.twitter.com) when they are instantiated.</p>
+
+<div class="highlight highlight-objective-c"><pre><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">readonly</span><span class="p">)</span> <span class="n">BDBOAuthToken</span> <span class="o">*</span><span class="n">accessToken</span><span class="p">;</span>
+
+<span class="cp">#pragma mark Initialization</span>
+<span class="k">+</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="nf">serializerForService:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">service</span>
+                     <span class="nl">withConsumerKey:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span>
+                      <span class="nl">consumerSecret:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">secret</span><span class="p">;</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">initWithService:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">service</span>
+          <span class="nl">consumerKey:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span>
+       <span class="nl">consumerSecret:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">secret</span><span class="p">;</span>
+
+<span class="cp">#pragma mark OAuth</span>
+<span class="k">-</span> <span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nf">OAuthParameters</span><span class="p">;</span>
+
+<span class="cp">#pragma mark AccessToken</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">saveAccessToken:</span><span class="p">(</span><span class="n">BDBOAuthToken</span> <span class="o">*</span><span class="p">)</span><span class="nv">accessToken</span><span class="p">;</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">removeAccessToken</span><span class="p">;</span>
+</pre></div>
+
+<h2>
+<a name="authentication-flow" class="anchor" href="#authentication-flow"><span class="octicon octicon-link"></span></a>Authentication Flow</h2>
+
+<p>The first step in performing the OAuth handshake is getting an OAuth request token for your application. This can be done with the <code>fetchRequestTokenWithPath:method:callbackURL:scope:success:failure:</code> method.</p>
+
+<div class="highlight highlight-objective-c"><pre><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">networkManager</span> <span class="n">fetchRequestTokenWithPath</span><span class="o">:</span><span class="s">@"/oauth/request_token"</span>
+                                        <span class="nl">method:</span><span class="s">@"POST"</span>
+                                   <span class="nl">callbackURL:</span><span class="p">[</span><span class="n">NSURL</span> <span class="n">URLWithString</span><span class="o">:</span><span class="s">@"bdboauth://request"</span><span class="p">]</span>
+                                         <span class="nl">scope:</span><span class="nb">nil</span>
+                                       <span class="nl">success:</span><span class="o">^</span><span class="p">(</span><span class="n">BDBOAuthToken</span> <span class="o">*</span><span class="n">requestToken</span><span class="p">)</span> <span class="p">{</span>
+                                           <span class="n">NSString</span> <span class="o">*</span><span class="n">authURL</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="n">stringWithFormat</span><span class="o">:</span><span class="s">@"https://api.twitter.com/oauth/authorize?oauth_token=%@"</span><span class="p">,</span> <span class="n">requestToken</span><span class="p">.</span><span class="n">token</span><span class="p">];</span>
+                                           <span class="p">[[</span><span class="n">UIApplication</span> <span class="n">sharedApplication</span><span class="p">]</span> <span class="n">openURL</span><span class="o">:</span><span class="p">[</span><span class="n">NSURL</span> <span class="n">URLWithString</span><span class="o">:</span><span class="n">authURL</span><span class="p">]];</span>
+                                       <span class="p">}</span>
+                                       <span class="nl">failure:</span><span class="o">^</span><span class="p">(</span><span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+                                           <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Error: %@"</span><span class="p">,</span> <span class="n">error</span><span class="p">.</span><span class="n">localizedDescription</span><span class="p">);</span>
+                                       <span class="p">}];</span>
+</pre></div>
+
+<h3>
+<a name="creating-a-url-type-for-oauth-callbacks" class="anchor" href="#creating-a-url-type-for-oauth-callbacks"><span class="octicon octicon-link"></span></a>Creating a URL Type for OAuth Callbacks</h3>
+
+<p>When calling <code>fetchRequestTokenWithPath:method:callbackURL:scope:success:failure:</code>, you must provide a unique callback URL whose scheme corresponds to a URL type you've added to your project target. This allows the OAuth provider to return the user to your app after the user has authorized it. For example, if I add a URL type to my project with the scheme <code>bdboauth</code>, my application would then respond to all URL requests that begin with <code>bdboauth:</code>. If I pass <code>bdboauth://request</code> as the callback URL, the OAuth provider would call that URL and my application would resume.</p>
+
+<p><img src="https://dl.dropboxusercontent.com/u/6225/GitHub/BDBOAuth1Manager/urltypes.png" alt="URL Types Screenshot"></p>
+
+<h3>
+<a name="responding-to-oauth-callbacks" class="anchor" href="#responding-to-oauth-callbacks"><span class="octicon octicon-link"></span></a>Responding to OAuth Callbacks</h3>
+
+<p>In order to respond to your application's URL scheme being called, you must implement the <code>-application:openURL:sourceApplication:annotation</code> method within your application delegate. You can do something like this:</p>
+
+<div class="highlight highlight-objective-c"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">application:</span><span class="p">(</span><span class="n">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="nv">application</span>
+            <span class="nl">openURL:</span><span class="p">(</span><span class="n">NSURL</span> <span class="o">*</span><span class="p">)</span><span class="nv">url</span>
+  <span class="nl">sourceApplication:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">sourceApplication</span>
+         <span class="nl">annotation:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">annotation</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">([</span><span class="n">url</span><span class="p">.</span><span class="n">scheme</span> <span class="n">isEqualToString</span><span class="o">:</span><span class="s">@"bdboauth"</span><span class="p">])</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">([</span><span class="n">url</span><span class="p">.</span><span class="n">host</span> <span class="n">isEqualToString</span><span class="o">:</span><span class="s">@"request"</span><span class="p">])</span>
+        <span class="p">{</span>
+            <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span><span class="n">url</span> <span class="n">dictionaryFromQueryString</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s">@"oauth_token"</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">parameters</span><span class="p">[</span><span class="s">@"oauth_verifier"</span><span class="p">])</span>
+                <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">networkManager</span> <span class="n">fetchAccessTokenWithPath</span><span class="o">:</span><span class="s">@"/oauth/access_token"</span>
+                                                       <span class="nl">method:</span><span class="s">@"POST"</span>
+                                                 <span class="nl">requestToken:</span><span class="p">[</span><span class="n">BDBOAuthToken</span> <span class="n">tokenWithQueryString</span><span class="o">:</span><span class="n">url</span><span class="p">.</span><span class="n">query</span><span class="p">]</span>
+                                                      <span class="nl">success:</span><span class="o">^</span><span class="p">(</span><span class="n">BDBOAuthToken</span> <span class="o">*</span><span class="n">accessToken</span><span class="p">)</span> <span class="p">{</span>
+                                                          <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">networkManager</span><span class="p">.</span><span class="n">requestSerializer</span> <span class="n">saveAccessToken</span><span class="o">:</span><span class="n">accessToken</span><span class="p">];</span>
+                                                      <span class="p">}];</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">NO</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2>
+<a name="credits" class="anchor" href="#credits"><span class="octicon octicon-link"></span></a>Credits</h2>
+
+<p>BDBOAuth1Manager was created by <a href="http://www.bradbergeron.com">Bradley David Bergeron</a> and influenced by <a href="https://github.com/AFNetworking/AFOAuth1Client">AFOAuth1Client</a>. Both <a href="https://github.com/AFNetworking/AFNetworking">AFNetworking</a> and <a href="https://github.com/AFNetworking/AFOAuth1Client">AFOAuth1Client</a> are the awesome work of <a href="https://github.com/mattt">Mattt Thompson</a>.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/bdbergeron/BDBOAuth1Manager/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/bdbergeron/BDBOAuth1Manager/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/bdbergeron/BDBOAuth1Manager"></a> is maintained by <a href="https://github.com/bdbergeron">bdbergeron</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
