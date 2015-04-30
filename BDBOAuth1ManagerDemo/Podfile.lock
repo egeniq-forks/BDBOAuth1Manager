@@ -1,23 +1,25 @@
 PODS:
-  - AFNetworking/NSURLConnection (2.2.4):
+  - AFNetworking/NSURLConnection (2.5.0):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/NSURLSession (2.2.4):
-    - AFNetworking/NSURLConnection
-  - AFNetworking/Reachability (2.2.4)
-  - AFNetworking/Security (2.2.4)
-  - AFNetworking/Serialization (2.2.4)
-  - AFNetworking/UIKit (2.2.4):
+  - AFNetworking/NSURLSession (2.5.0):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.5.0)
+  - AFNetworking/Security (2.5.0)
+  - AFNetworking/Serialization (2.5.0)
+  - AFNetworking/UIKit (2.5.0):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - BBlock/UIKit (1.2.0)
-  - BDBOAuth1Manager (1.2.1):
-    - AFNetworking/NSURLConnection (~> 2.2.0)
-    - AFNetworking/NSURLSession (~> 2.2.0)
+  - BDBOAuth1Manager (1.5.0):
+    - AFNetworking/NSURLConnection (~> 2.5.0)
+    - AFNetworking/NSURLSession (~> 2.5.0)
 
 DEPENDENCIES:
-  - AFNetworking/UIKit (~> 2.2.0)
+  - AFNetworking/UIKit (~> 2.5.0)
   - BBlock/UIKit (~> 1.2.0)
   - BDBOAuth1Manager (from `../`)
 
@@ -26,8 +28,8 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  AFNetworking: 01aa7c3aa9a200b94943e54072a4373f14b3d219
-  BBlock: f2408a391007cbd72c0a122869e19fda8e12f0bc
-  BDBOAuth1Manager: 6ea87b4fd051b4f65475d168a816c3c6db3caa7c
+  AFNetworking: 0f54cb5d16ce38c1b76948faffb8d5fb705021c7
+  BBlock: 90f0ae0e3ba94fc88be6b9a85b4adbb73b8a7c9a
+  BDBOAuth1Manager: 164b717a1123fbcfe6f8209a23823261e0ac11ee
 
-COCOAPODS: 0.33.1
+COCOAPODS: 0.34.4
